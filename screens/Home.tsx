@@ -71,7 +71,11 @@ class Home extends React.Component<Props> {
             />
             <TopText color={textColor} />
             <Report backColor={componentColor} textColor={textColor} />
-            <Options backColor={componentColor} textColor={textColor} />
+            <Options
+              {...this.props}
+              backColor={componentColor}
+              textColor={textColor}
+            />
             <News
               {...this.props}
               backColor={componentColor}

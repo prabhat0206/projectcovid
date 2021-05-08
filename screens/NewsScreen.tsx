@@ -8,13 +8,16 @@ import {
   Image,
   useColorScheme,
   ImageBackground,
+  Linking,
 } from 'react-native';
 import {TopBar} from '../components/otherScreenTopBar';
 import {dummyNews, blurImage} from '../components/Data';
 import {RFPercentage} from 'react-native-responsive-fontsize';
+import moment from 'moment';
 
 interface Props {
   darkMode: boolean;
+  route: any;
 }
 
 interface State {
@@ -43,43 +46,24 @@ export class NewsScreen extends React.Component<Props> {
     };
   }
 
-  componentDidMount() {
-    this.fetchNews(this.state.page);
+  componentDidMount() {}
+
+  componentDidUpdate(prevProps: Props, prevState: State) {}
+
+  componentWillUnmount() {
+    this.setState({news: null});
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
-    if (prevState.page !== this.state.page) {
-      this.fetchNews(this.state.page);
-    }
-  }
-
-  async fetchNews(page: number) {
-    const url = '';
-    if (page === 1) {
-      this.setState({isLoading: true});
-    }
-    if (this.state.isNext) {
-      await fetch(url)
-        .then(response => response.json())
-        .then(news => {
-          if (page === 5) {
-            this.setState({news: news.articles, isNext: false});
-          } else {
-            this.setState({news: news.articles, page: page + 1});
-          }
-        })
-        .catch(err => {
-          this.setState({isServerAvailable: false});
-        })
-        .finally(() => {
-          this.setState({isLoading: false});
-        });
+  async openUrl(url: string) {
+    const isSupported = await Linking.canOpenURL(url);
+    if (isSupported) {
+      await Linking.openURL(url);
     }
   }
 
   render() {
-    const descriptionlength = 140;
-    const {darkMode} = this.props;
+    const {darkMode, route} = this.props;
+    const {newsData} = route.params;
     const backColor = darkMode ? '#121212' : '#rgba(255,255,255, 0.87)';
     const componentColor = darkMode ? '#242424' : '#ffffff';
     const textColor = darkMode ? '#fff' : '#000';
@@ -96,39 +80,48 @@ export class NewsScreen extends React.Component<Props> {
           />
           <View style={[styles.newsContainer]}>
             <FlatList
-              data={dummyNews}
-              keyExtractor={({id}, index) => id.toString()}
+              data={newsData}
+              keyExtractor={({publishedAt}, index) => publishedAt}
               ItemSeparatorComponent={() => <View style={{height: 7}} />}
               renderItem={({item}) => {
                 return (
                   <TouchableOpacity
+                    onPress={() => this.openUrl(item.url)}
                     style={[styles.NewData, {backgroundColor: componentColor}]}>
                     <View style={styles.newsImg}>
                       <Image
-                        source={{uri: item.image}}
+                        source={{uri: item.urlToImage}}
                         style={{width: '100%', height: '100%'}}
                       />
                     </View>
                     <View style={styles.textContainer}>
                       <Text
+                        numberOfLines={2}
+                        ellipsizeMode="tail"
                         style={{
                           color: textColor,
                           fontWeight: 'bold',
-                          fontSize: RFPercentage(2.2),
+                          fontSize: RFPercentage(1.9),
                         }}>
-                        {item.title.length > 55
-                          ? `${item.title.slice(0, 55)}...`
-                          : item.title}
+                        {item.title}
+                      </Text>
+                      <Text
+                        numberOfLines={3}
+                        ellipsizeMode="tail"
+                        style={{
+                          color: textColor,
+                          fontSize: RFPercentage(1.45),
+                          marginTop: 5,
+                        }}>
+                        {item.description}
                       </Text>
                       <Text
                         style={{
                           color: textColor,
-                          fontSize: RFPercentage(1.7),
-                          marginTop: 5,
+                          fontSize: RFPercentage(1.4),
+                          marginTop: 2,
                         }}>
-                        {item.description.length > descriptionlength
-                          ? `${item.description.slice(0, descriptionlength)}...`
-                          : item.description}
+                        {moment(item.publishedAt).fromNow()}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -192,7 +185,7 @@ const styles = StyleSheet.create({
   newsImg: {
     width: 120,
     borderRadius: 10,
-    backgroundColor: 'green',
+    backgroundColor: '#000',
     overflow: 'hidden',
   },
   textContainer: {

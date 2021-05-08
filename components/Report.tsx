@@ -12,10 +12,114 @@ interface Props {
   textColor: string;
 }
 
+interface State {
+  total_cases: number;
+  total_confirmed: number;
+  total_recovered: number;
+  total_new_recovered: number;
+  total_deaths: number;
+  total_new_deaths: number;
+  world_cases: number;
+  world_recovered: number;
+  world_deaths: number;
+}
+
 class Report extends React.Component<Props> {
+  state: State;
   constructor(props: Readonly<Props>) {
     super(props);
+    this.state = {
+      total_cases: 0,
+      total_confirmed: 0,
+      total_recovered: 0,
+      total_new_recovered: 0,
+      total_deaths: 0,
+      total_new_deaths: 0,
+      world_cases: 0,
+      world_recovered: 0,
+      world_deaths: 0,
+    };
   }
+
+  componentDidMount() {
+    this.fetchCases('india');
+  }
+
+  async fetchCases(country: string) {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+    };
+    let dates: number[] = [];
+    let cases_list: number[] = [];
+    let recoverd: number[] = [];
+    let deaths: number[] = [];
+    await fetch(
+      'https://api.covid19api.com/total/country/' +
+        country +
+        '/status/confirmed',
+      requestOptions,
+    )
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        data.forEach((entry: any) => {
+          dates.push(entry.Date);
+          cases_list.push(entry.Cases);
+        });
+      })
+      .catch(e => console.log(e));
+    const cases = cases_list[cases_list.length - 1];
+    await fetch(
+      'https://api.covid19api.com/total/country/' +
+        country +
+        '/status/recovered',
+      requestOptions,
+    )
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        data.forEach((entry: any) => {
+          recoverd.push(entry.Cases);
+        });
+      });
+    const t_recovered = recoverd[recoverd.length - 1];
+    await fetch(
+      'https://api.covid19api.com/total/country/' + country + '/status/deaths',
+      requestOptions,
+    )
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+        data.forEach((entry: any) => {
+          deaths.push(entry.Cases);
+        });
+      });
+    const t_death = deaths[deaths.length - 1];
+    this.setState({
+      total_cases: cases,
+      total_confirmed: cases - cases_list[cases_list.length - 2],
+      total_recovered: t_recovered,
+      total_new_recovered: t_recovered - recoverd[recoverd.length - 2],
+      total_deaths: t_death,
+      total_new_deaths: t_death - deaths[deaths.length - 2],
+    });
+
+    await fetch('https://corona.lmao.ninja/v2/all?yesterday')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          world_cases: data.cases,
+          world_deaths: data.deaths,
+          world_recovered: data.recovered,
+        });
+      })
+      .catch(e => console.log(e));
+  }
+
   render() {
     const {backColor, textColor} = this.props;
     const gradientColor =
@@ -56,21 +160,27 @@ class Report extends React.Component<Props> {
             </View>
             <View style={styles.ComponentText}>
               <Text style={[styles.numberValue, {color: textColor}]}>
-                {abbreviate(1080000, 2)}
+                {abbreviate(this.state.total_cases, 2)}
               </Text>
-              <Text style={[styles.newValue, {color: textColor}]}>+108000</Text>
+              <Text style={[styles.newValue, {color: textColor}]}>
+                +{this.state.total_confirmed}
+              </Text>
             </View>
             <View style={styles.ComponentText}>
               <Text style={[styles.numberValue, {color: textColor}]}>
-                {abbreviate(900000, 2)}
+                {abbreviate(this.state.total_recovered, 2)}
               </Text>
-              <Text style={[styles.newValue, {color: textColor}]}>+100000</Text>
+              <Text style={[styles.newValue, {color: textColor}]}>
+                +{this.state.total_new_recovered}
+              </Text>
             </View>
             <View style={styles.ComponentText}>
               <Text style={[styles.numberValue, {color: textColor}]}>
-                {abbreviate(3000, 2)}
+                {abbreviate(this.state.total_deaths, 2)}
               </Text>
-              <Text style={[styles.newValue, {color: textColor}]}>+800</Text>
+              <Text style={[styles.newValue, {color: textColor}]}>
+                +{this.state.total_new_deaths}
+              </Text>
             </View>
           </View>
           <View style={styles.containerText}>
@@ -79,21 +189,18 @@ class Report extends React.Component<Props> {
             </View>
             <View style={styles.ComponentText}>
               <Text style={[styles.numberValue, {color: textColor}]}>
-                {abbreviate(100000000, 2)}
+                {abbreviate(this.state.world_cases, 2)}
               </Text>
-              <Text style={[styles.newValue, {color: textColor}]}>+108000</Text>
             </View>
             <View style={styles.ComponentText}>
               <Text style={[styles.numberValue, {color: textColor}]}>
-                {abbreviate(60000000, 2)}
+                {abbreviate(this.state.world_recovered, 2)}
               </Text>
-              <Text style={[styles.newValue, {color: textColor}]}>+10000</Text>
             </View>
             <View style={styles.ComponentText}>
               <Text style={[styles.numberValue, {color: textColor}]}>
-                {abbreviate(5000000, 2)}
+                {abbreviate(this.state.world_deaths, 2)}
               </Text>
-              <Text style={[styles.newValue, {color: textColor}]}>+800</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -147,14 +254,14 @@ const styles = StyleSheet.create({
   },
   headText: {
     fontWeight: '500',
-    fontSize: RFPercentage(2),
+    fontSize: RFPercentage(1.8),
   },
   numberValue: {
-    fontSize: 16,
+    fontSize: RFPercentage(2),
     color: '#fff',
   },
   newValue: {
-    fontSize: 11,
+    fontSize: RFPercentage(1.5),
     fontWeight: '100',
   },
 });

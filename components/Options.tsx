@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
+  Linking,
 } from 'react-native';
 import OptionsData from './Data';
 
@@ -17,8 +18,19 @@ export default class Options extends React.Component<Props> {
   constructor(props: Readonly<Props>) {
     super(props);
   }
+
+  async openUrl(url: string) {
+    const isOpen = await Linking.canOpenURL(url);
+    if (isOpen) {
+      await Linking.openURL(url);
+    } else {
+      console.log('not Supported');
+    }
+  }
   render() {
     const {backColor, textColor} = this.props;
+    const {navigation}: any = this.props;
+
     return (
       <View style={styles.OptionsContainer}>
         <View style={styles.OptionsItem}>
@@ -28,7 +40,18 @@ export default class Options extends React.Component<Props> {
                 source={{uri: item.url}}
                 blurRadius={30}
                 style={[styles.Option, {backgroundColor: backColor}]}>
-                <TouchableOpacity style={styles.titlesCom}>
+                <TouchableOpacity
+                  style={styles.titlesCom}
+                  onPress={() => {
+                    if (item.title === 'HOSPITALS') {
+                      this.openUrl('geo:0,0?q=hospitals');
+                    } else {
+                      navigation.navigate('mainhome', {
+                        screen: 'inform',
+                        params: {headTitle: item.title},
+                      });
+                    }
+                  }}>
                   <Text style={styles.title}>{item.title}</Text>
                 </TouchableOpacity>
               </ImageBackground>
@@ -36,7 +59,14 @@ export default class Options extends React.Component<Props> {
                 source={{uri: item.url2}}
                 blurRadius={30}
                 style={[styles.Option, {backgroundColor: backColor}]}>
-                <TouchableOpacity style={styles.titlesCom}>
+                <TouchableOpacity
+                  style={styles.titlesCom}
+                  onPress={() =>
+                    navigation.navigate('mainhome', {
+                      screen: 'inform',
+                      params: {headTitle: item.title2},
+                    })
+                  }>
                   <Text style={styles.title}>{item.title2}</Text>
                 </TouchableOpacity>
               </ImageBackground>

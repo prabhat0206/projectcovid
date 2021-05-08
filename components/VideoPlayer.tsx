@@ -77,7 +77,7 @@ export const VideoPlayer = ({backColor, textColor}: any) => {
       <View style={[styles.videoContainer, {backgroundColor: backColor}]}>
         <View style={[styles.Video]}>
           <Video
-            source={require(`../assets/Videos.mp4`)}
+            source={{uri: ''}}
             ref={ref => (player = ref)}
             onBuffer={() => {
               setActivity(true);

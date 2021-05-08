@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, Linking} from 'react-native';
 
 interface Props {
   backColor: string;
@@ -28,9 +28,11 @@ export default class TopBar extends React.Component<Props> {
               onPress={() => navigation.openDrawer()}>
               <Icon name={icon} color={textColor} size={24} />
             </TouchableOpacity>
-            <View style={style.menuIcon}>
+            <TouchableOpacity
+              onPress={() => Linking.openURL('tel:+917061644185')}
+              style={style.menuIcon}>
               <Icon name="phone" color={textColor} size={20} />
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </>
