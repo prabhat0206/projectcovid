@@ -6,6 +6,7 @@ import {
   View,
   ImageBackground,
   Linking,
+  Dimensions
 } from 'react-native';
 import OptionsData from './Data';
 
@@ -78,10 +79,11 @@ export default class Options extends React.Component<Props> {
   }
 }
 
+const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   OptionsContainer: {
     width: '100%',
-    height: 360,
+    height: height / 2.5,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 8,

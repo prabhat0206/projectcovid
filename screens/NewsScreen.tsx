@@ -8,10 +8,11 @@ import {
   Image,
   useColorScheme,
   ImageBackground,
+  Dimensions,
   Linking,
 } from 'react-native';
 import {TopBar} from '../components/otherScreenTopBar';
-import {dummyNews, blurImage} from '../components/Data';
+import {blurImage} from '../components/Data';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 import moment from 'moment';
 
@@ -135,6 +136,7 @@ export class NewsScreen extends React.Component<Props> {
   }
 }
 
+const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   NewLayout: {
     width: '100%',
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   NewData: {
-    height: 120,
+    height: height / 7,
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'center',
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
   },
   newsImg: {
-    width: 120,
+    width: height /7,
     borderRadius: 10,
     backgroundColor: '#000',
     overflow: 'hidden',

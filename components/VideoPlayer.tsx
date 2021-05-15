@@ -13,7 +13,7 @@ import moment from 'moment';
 import Slider from '@react-native-community/slider';
 import Video from 'react-native-video';
 
-export const VideoPlayer = ({backColor, textColor}: any) => {
+export const VideoPlayer = ({backColor, textColor, route}: any) => {
   const [isPaused, setisPaused] = React.useState(false);
   const [duration, setDuration] = React.useState(0);
   const [position, setPosition] = React.useState(0);
@@ -77,7 +77,7 @@ export const VideoPlayer = ({backColor, textColor}: any) => {
       <View style={[styles.videoContainer, {backgroundColor: backColor}]}>
         <View style={[styles.Video]}>
           <Video
-            source={{uri: ''}}
+            source={{uri: route.params.url}}
             ref={ref => (player = ref)}
             onBuffer={() => {
               setActivity(true);

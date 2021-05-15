@@ -4,6 +4,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useColorScheme} from 'react-native';
 import {StackScreens} from './Stack';
 import {DrawerContent} from '../components/DrawerContent';
+import RNBootSplash from 'react-native-bootsplash';
 
 const Drawer = () => {
   const drawer = createDrawerNavigator();
@@ -12,7 +13,7 @@ const Drawer = () => {
   const componentColor =
     useColorScheme() === 'dark' ? '#121212' : 'rgba(255,255,255,0.87)';
   return (
-    <NavigationContainer>
+    <NavigationContainer onReady={() => RNBootSplash.hide()}>
       <drawer.Navigator
         drawerStyle={{width: '80%', backgroundColor: backColor, padding: 5}}
         drawerContent={porps => (

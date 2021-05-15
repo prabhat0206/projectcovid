@@ -10,9 +10,19 @@ import {
 // https://dl.dropboxusercontent.com/s/hb8g87bo94okxu2/mountains_sky_sunset_peaks_97149_1366x768.jpg
 export default class CovidShorts extends React.Component {
   render() {
+    const {navigation}: any = this.props;
     return (
       <View style={styles.covidLayout}>
-        <TouchableOpacity style={styles.covidComponent}>
+        <TouchableOpacity
+          style={styles.covidComponent}
+          onPress={() =>
+            navigation.navigate('mainhome', {
+              screen: 'inform',
+              params: {
+                headTitle: 'ABOUT COVID-19',
+              },
+            })
+          }>
           <ImageBackground
             blurRadius={30}
             source={blurImage}

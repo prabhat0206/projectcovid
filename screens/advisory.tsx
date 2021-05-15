@@ -5,6 +5,8 @@ import {
   ImageBackground,
   FlatList,
   Dimensions,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {TopBar} from '../components/otherScreenTopBar';
 import {blurImage, advisoryVideo} from '../components/Data';
@@ -12,6 +14,8 @@ import {Thumbnail} from '../components/Thumnail';
 
 interface state {
   is_portrait: boolean;
+  data: any[];
+  isLoading: boolean;
 }
 
 export default class Advisory extends React.Component {
@@ -20,6 +24,8 @@ export default class Advisory extends React.Component {
     super(props);
     this.state = {
       is_portrait: false,
+      data: [],
+      isLoading: true,
     };
     Dimensions.addEventListener('change', () => {
       this.setState({is_portrait: this.isPortrait()});
@@ -28,6 +34,11 @@ export default class Advisory extends React.Component {
 
   componentDidMount() {
     this.isPortrait();
+    fetch('https://dl.dropboxusercontent.com/s/n3tsjsu7hpqfmgg/videos.json')
+      .then(res => res.json())
+      .then(data => this.setState({data: data}))
+      .catch(e => Alert.alert('server error, check your internet connection'))
+      .finally(() => this.setState({isLoading: false}));
   }
 
   componentDidUpdate(prevProps: any, prevState: state) {
@@ -55,10 +66,20 @@ export default class Advisory extends React.Component {
       <ImageBackground source={blurImage} blurRadius={80} style={styles.Image}>
         <View style={[styles.mainVideos, {backgroundColor: backColor}]}>
           <TopBar {...this.props} textColor={textColor} name={route.name} />
-          {this.state.is_portrait ? (
+          {this.state.isLoading ? (
+            <View
+              style={{
+                flex: 1,
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <ActivityIndicator color={textColor} size="large" />
+            </View>
+          ) : this.state.is_portrait ? (
             <FlatList
               key={'#'}
-              data={advisoryVideo}
+              data={this.state.data}
               style={{flex: 1, width: '100%'}}
               keyExtractor={({id}, index) => id.toString()}
               renderItem={({item}) => (
@@ -74,7 +95,7 @@ export default class Advisory extends React.Component {
           ) : (
             <FlatList
               key={'_'}
-              data={advisoryVideo}
+              data={this.state.data}
               style={{flex: 1, width: '100%'}}
               keyExtractor={({id}, index) => id.toString()}
               renderItem={({item}) => (

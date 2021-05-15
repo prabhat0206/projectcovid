@@ -15,6 +15,13 @@ target 'projectcovid' do
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
+
+
+  pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
+
+  pod 'RNBootSplash', :path => '../node_modules/react-native-bootsplash'
+
   target 'projectcovidTests' do
     inherit! :complete
     # Pods for testing

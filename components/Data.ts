@@ -46,7 +46,7 @@ export const drawerItem = [
   },
   {
     id: 4,
-    name: 'report graph',
+    name: 'GRAPH REPORTS',
     icon: 'chart-line',
   },
   {
@@ -66,37 +66,47 @@ export const advisoryVideo = [
     name: 'Hello World',
     video: '',
   },
-  {
-    id: 2,
-    url:
-      'https://cdn.pixabay.com/photo/2021/04/27/18/54/sunflower-6212201_960_720.jpg',
-    name: 'Hello World 2',
-    video: '',
-  },
-  {
-    id: 3,
-    url:
-      'https://cdn.pixabay.com/photo/2017/09/29/13/36/river-2799103_960_720.jpg',
-    name: 'Hello World 3',
-    video: '',
-  },
-  {
-    id: 4,
-    url:
-      'https://cdn.pixabay.com/photo/2019/06/21/23/13/dispersal-4290533_960_720.jpg',
-    name: 'Hello World 4',
-    video: '',
-  },
-  {
-    id: 5,
-    url:
-      'https://cdn.pixabay.com/photo/2017/09/29/13/36/river-2799103_960_720.jpg',
-    name: 'Hello World 5',
-    video: '',
-  },
 ];
 
-export const whoData =
-  'https://dl.dropboxusercontent.com/s/8yglsl30j4pbw5e/who.json';
+let address: string;
+export const apiAddress = (caseIn: string) => {
+  caseIn = caseIn.split(' ')[0];
+  switch (caseIn) {
+    case 'WHO':
+      address = 'https://dl.dropboxusercontent.com/s/8yglsl30j4pbw5e/who.json';
+      break;
+    case 'FACTS':
+      address =
+        'https://dl.dropboxusercontent.com/s/r5bpi4bi6ulai4o/facts.json';
+      break;
+    case 'GRAPH':
+      address =
+        'https://dl.dropboxusercontent.com/s/2xe915edfx3eyue/report.json?dl=0';
+      break;
+    case 'FAQs':
+      address = 'https://dl.dropboxusercontent.com/s/rdrgdbvsc0avgdt/faq.json';
+      break;
+    case 'DIET':
+      address = 'https://dl.dropboxusercontent.com/s/j8ls4hzpgarsrkj/diet.json';
+      break;
+    case 'RELIEF':
+      address =
+        'https://dl.dropboxusercontent.com/s/7lnn9hhjl4gd2lu/links.json';
+      break;
+    case 'GUIDELINES':
+      address =
+        'https://dl.dropboxusercontent.com/s/6g5pss8knsjw98b/guidlines.json';
+      break;
+    case 'ABOUT':
+      address =
+        'https://dl.dropboxusercontent.com/s/mlyloeaxvf05h4n/aboutCovid.json';
+      break;
+    case 'about':
+      address =
+        'https://dl.dropboxusercontent.com/s/vp978um4agpixv8/about.json';
+      break;
+  }
+  return address;
+};
 
 export default OptionsData;

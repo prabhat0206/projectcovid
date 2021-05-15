@@ -1,6 +1,14 @@
 import React from 'react';
 import {abbreviate} from '@pqt/abbreviate';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Dimensions,
+  Alert,
+  Linking,
+} from 'react-native';
 import {RFPercentage} from 'react-native-responsive-fontsize';
 
 export default function (porps: any) {
@@ -44,6 +52,14 @@ class Report extends React.Component<Props> {
   componentDidMount() {
     this.fetchCases('india');
   }
+  async openUrl() {
+    const isSupported = await Linking.canOpenURL('https://covid19.who.int/');
+    if (isSupported) {
+      await Linking.openURL('https://covid19.who.int/');
+    } else {
+      Alert.alert('Page not found');
+    }
+  }
 
   async fetchCases(country: string) {
     const requestOptions = {
@@ -69,7 +85,7 @@ class Report extends React.Component<Props> {
           cases_list.push(entry.Cases);
         });
       })
-      .catch(e => console.log(e));
+      .catch(e => Alert.alert('server error, check your internet connection'));
     const cases = cases_list[cases_list.length - 1];
     await fetch(
       'https://api.covid19api.com/total/country/' +
@@ -84,7 +100,8 @@ class Report extends React.Component<Props> {
         data.forEach((entry: any) => {
           recoverd.push(entry.Cases);
         });
-      });
+      })
+      .catch(e => Alert.alert('server error, check your internet connection'));
     const t_recovered = recoverd[recoverd.length - 1];
     await fetch(
       'https://api.covid19api.com/total/country/' + country + '/status/deaths',
@@ -97,7 +114,8 @@ class Report extends React.Component<Props> {
         data.forEach((entry: any) => {
           deaths.push(entry.Cases);
         });
-      });
+      })
+      .catch(e => Alert.alert('server error, check your internet connection'));
     const t_death = deaths[deaths.length - 1];
     this.setState({
       total_cases: cases,
@@ -127,6 +145,7 @@ class Report extends React.Component<Props> {
     return (
       <View style={styles.ReportLayout}>
         <TouchableOpacity
+          onPress={this.openUrl}
           style={[styles.ReportCard, {backgroundColor: backColor}]}>
           <View style={styles.container}>
             <View style={styles.head}>
@@ -209,10 +228,11 @@ class Report extends React.Component<Props> {
   }
 }
 
+const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   ReportLayout: {
     width: '100%',
-    height: 180,
+    height: height / 5,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 5,

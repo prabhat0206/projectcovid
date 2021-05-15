@@ -206,10 +206,11 @@ export default class News extends React.Component<Props> {
   }
 }
 
+const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   NewLayout: {
     width: '100%',
-    height: 405,
+    height: height / 2.2,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 5,
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
   newsImg: {
     width: 130,
     borderRadius: 10,
-    backgroundColor: 'green',
+    backgroundColor: 'black',
     overflow: 'hidden',
   },
   textContainer: {

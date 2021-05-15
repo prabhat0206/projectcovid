@@ -18,9 +18,9 @@ interface Props {
 
 interface Item {
   id: number;
-  url: string;
+  image: string;
   name: string;
-  video: string;
+  url: string;
 }
 
 export class Thumbnail extends React.Component<Props> {
@@ -35,14 +35,14 @@ export class Thumbnail extends React.Component<Props> {
         <View style={[styles.ThumbnailContainer, {backgroundColor: backColor}]}>
           <ImageBackground
             blurRadius={10}
-            source={{uri: item.url}}
+            source={{uri: item.image}}
             style={[styles.ThumbnailViews]}>
             <TouchableOpacity
               style={styles.iconContainer}
               onPress={() =>
                 navigation.navigate('mainhome', {
                   screen: 'videoPlayer',
-                  params: {url: item.video},
+                  params: {url: item.url},
                 })
               }>
               <Icon name="play" color="#fff" size={40} />
@@ -60,7 +60,7 @@ export class Thumbnail extends React.Component<Props> {
 const styles = StyleSheet.create({
   thumbnailContainer: {
     flex: 1,
-    height: 320,
+    height: 400,
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
   },
   textContainer: {
-    height: 50,
+    height: 80,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',

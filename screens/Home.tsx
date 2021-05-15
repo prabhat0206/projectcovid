@@ -8,7 +8,6 @@ import CovidShorts from '../components/CovidShorts';
 import {useIsDrawerOpen} from '@react-navigation/drawer';
 import {blurImage} from '../components/Data';
 import {
-  Text,
   View,
   StatusBar,
   StyleSheet,
@@ -63,13 +62,11 @@ class Home extends React.Component<Props> {
             barStyle={barStyle}
           />
           <ScrollView>
-            <TopBar
-              navigation={navigation}
-              backColor={BackColor}
+            <TopText
               textColor={textColor}
-              isOpen={this.props.isOpen}
+              navigation={navigation}
+              BackColor={BackColor}
             />
-            <TopText color={textColor} />
             <Report backColor={componentColor} textColor={textColor} />
             <Options
               {...this.props}
@@ -81,7 +78,7 @@ class Home extends React.Component<Props> {
               backColor={componentColor}
               textColor={textColor}
             />
-            <CovidShorts />
+            <CovidShorts {...this.props} />
             <View style={{height: 30}} />
           </ScrollView>
         </View>

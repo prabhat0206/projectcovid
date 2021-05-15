@@ -40,7 +40,7 @@ const style = StyleSheet.create({
     flexDirection: 'row-reverse',
   },
   menuIcon: {
-    width: 200,
+    width: "100%",
     justifyContent: 'center',
   },
   menuIcons: {
@@ -49,7 +49,7 @@ const style = StyleSheet.create({
     // alignItems: 'center',
   },
   headText: {
-    fontSize: RFPercentage(2.7),
+    fontSize: RFPercentage(2.5),
     fontWeight: '400',
     textTransform: 'capitalize',
   },

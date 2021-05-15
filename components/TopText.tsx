@@ -1,27 +1,61 @@
 import React from 'react';
-import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  useColorScheme,
+  Dimensions,
+  ImageBackground,
+} from 'react-native';
+import {useIsDrawerOpen} from '@react-navigation/drawer';
+import TopBar from './TopBar';
 
-interface Value {
-  color: string;
-}
-
-const TopText = ({color}: Value) => {
+const TopText = ({textColor, navigation, BackColor}: any) => {
+  const isOpen = useIsDrawerOpen();
+  const darkMode = useColorScheme() === 'dark';
+  const overlayColor = darkMode ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)';
   return (
-    <View style={styles.textContainer}>
-      <Text style={{fontSize: 25, color: color}}>Thank you for choosing</Text>
-      <Text style={{fontSize: 25, color: color}}>us for your safety</Text>
-      <TouchableOpacity>
+    <ImageBackground
+      blurRadius={10}
+      source={{
+        uri:
+          'https://dl.dropboxusercontent.com/s/o48iwqaog7ezpwy/Banner.jpg?dl=0',
+      }}
+      style={styles.textContainer}>
+      <View
+        style={{
+          flex: 1,
+          width: '100%',
+          paddingTop: 20,
+          backgroundColor: overlayColor,
+        }}>
+        <TopBar
+          navigation={navigation}
+          backColor={BackColor}
+          textColor={textColor}
+          overlayColor={overlayColor}
+          isOpen={isOpen}
+        />
+        <View style={styles.overLay}>
+          <Text style={{fontSize: 25, color: textColor}}>
+            Support India's fight
+          </Text>
+          <Text style={{fontSize: 25, color: textColor}}>against Covid-19</Text>
+        </View>
+      </View>
+      {/* <TouchableOpacity>
         <Text style={[styles.buttonBottom, {color: color}]}>know more</Text>
-      </TouchableOpacity>
-    </View>
+      </TouchableOpacity> */}
+    </ImageBackground>
   );
 };
 
+const {height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 200,
+    height: height / 3.5,
     width: '100%',
     backgroundColor: 'transparent',
   },
@@ -33,6 +67,12 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     textTransform: 'capitalize',
     opacity: 0.8,
+  },
+  overLay: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

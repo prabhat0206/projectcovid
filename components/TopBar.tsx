@@ -1,12 +1,20 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {View, StyleSheet, Text, TouchableOpacity, Linking} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Linking,
+  Image,
+} from 'react-native';
 
 interface Props {
   backColor: string;
   textColor: string;
   navigation: any;
   isOpen: boolean;
+  overlayColor: string;
 }
 
 export default class TopBar extends React.Component<Props> {
@@ -14,13 +22,16 @@ export default class TopBar extends React.Component<Props> {
     super(props);
   }
   render() {
-    const {isOpen, textColor, navigation} = this.props;
+    const {isOpen, textColor, navigation, overlayColor} = this.props;
     const icon = isOpen ? 'times' : 'bars';
     return (
       <>
-        <View style={style.topBar}>
+        <View style={[style.topBar]}>
           <View style={style.logo}>
-            <Text style={{color: textColor, fontSize: 20}}>Logo</Text>
+            <Image
+              source={require('../assets/medi.png')}
+              style={{width: 50, height: 50, borderRadius: 50}}
+            />
           </View>
           <View style={style.menuAndHelpline}>
             <TouchableOpacity
@@ -29,7 +40,7 @@ export default class TopBar extends React.Component<Props> {
               <Icon name={icon} color={textColor} size={24} />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => Linking.openURL('tel:+917061644185')}
+              onPress={() => Linking.openURL('tel:+91-11-23978046')}
               style={style.menuIcon}>
               <Icon name="phone" color={textColor} size={20} />
             </TouchableOpacity>
@@ -42,11 +53,10 @@ export default class TopBar extends React.Component<Props> {
 
 const style = StyleSheet.create({
   topBar: {
-    height: 60,
+    height: 70,
     width: '100%',
     flexDirection: 'row',
-    backgroundColor: 'transparent',
-    marginTop: 20,
+    paddingTop: 20,
   },
   logo: {
     flex: 1,
